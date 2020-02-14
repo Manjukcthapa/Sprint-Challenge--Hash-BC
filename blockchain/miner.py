@@ -20,11 +20,20 @@ def proof_of_work(last_proof):
     - Use the same method to generate SHA-256 hashes as the examples in class
     """
 
+    #Simple Proof of Work Algorithm Stringify 
+    # the block and look for a proof. 
+    # Loop through possibilities, checking each one against
+    #  `valid_proof`in an effort to find a number that 
+    # is a valid proo:return: A valid proof for the provided block
+
     start = timer()
 
     print("Searching for next proof")
     proof = 0
-    #  TODO: Your code here
+   
+    last_hash = hashlib.sha256(f'{last_proof}'.encode()).hexdigest()
+    while valid_proof(last_hash, proof) is False:
+        proof += 1
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -38,9 +47,19 @@ def valid_proof(last_hash, proof):
 
     IE:  last_hash: ...AE9123456, new hash 123456E88...
     """
-
-    # TODO: Your code here!
-    pass
+    #  Validates the Proof:  Does hash(block_string, proof) contain 6
+    #     leading zeroes?  Return true if the proof is valid
+    #     :param block_string: <string> The stringified block to use to
+    #     check in combination with `proof`
+    #     :param proof: <int?> The value that when combined with the
+    #     stringified previous block results in a hash that has the
+    #     correct number of leading zeroes.
+    #     :return: True if the resulting hash is a valid proof, False otherwise
+    guess = f'{proof}'.encode()
+    hash_guess = hashlib.sha256(guess).hexdigest()
+    #matches last_hash  6 character to first_hash of 6 character
+    return hash_guess[:6] == last_hash[-6:]
+    
 
 
 if __name__ == '__main__':
